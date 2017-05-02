@@ -30,7 +30,7 @@ net start sqlbrowser
 
 
 #STEP3: ADD firewall rules for SQL service
-Wrie-Output "Enabling firewall rules"
+Write-Output "Enabling firewall rules"
 netsh advfirewall firewall add rule name = SQLPort dir = in protocol = tcp action = allow localport = 1433 remoteip = any profile = domain  
 netsh advfirewall firewall add rule name = SQLPortPrivate dir = in protocol = tcp action = allow localport = 1433 remoteip = any profile = private  
 netsh advfirewall firewall add rule name = SQLPortPublic dir = in protocol = tcp action = allow localport = 1433 remoteip = any profile = public  
