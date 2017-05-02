@@ -1,10 +1,15 @@
 param
 (
-    [Parameter(Mandatory=$true)]
-    [string] $sqluser
+    [Parameter(Mandatory=$false)]
+    [string] $sqluser 
 )
 
 $sqlInstanceName = 'MSSQLSERVER'
+
+if ([String]::IsNullOrEmpty($sqluser) -eq $true)
+    { 
+        $sqluser = "contoso"
+    }
 
 #STEP1: Enable TCP protocol
 Write-Output "Enabling TCP protocol"
