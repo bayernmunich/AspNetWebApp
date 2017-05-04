@@ -48,12 +48,28 @@ net start $sqlInstanceName /yes
 
 #STEP5: Add user to SQL roles
 Write-Output "Adding user to SQL roles"+$sqluser
+$sqluser = "contoso"
+$username = "$env:ComputerName\$sqluser"
+$password = 'Microsoft!123'
+$securePassword = ConvertTo-SecureString $password -AsPlainText -Force
+$credential = New-Object System.Management.Automation.PSCredential $username, $securePassword
+
 $sqltoolPath="C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\binn"
 pushd $sqltoolPath
-cmd /c sqlcmd.exe -S localhost -Q "sp_addsrvrolemember '$env:ComputerName\$sqluser', 'sysadmin'"
-cmd /c sqlcmd.exe -S localhost -Q "sp_addsrvrolemember '$env:ComputerName\$sqluser', 'dbcreator'"
-cmd /c sqlcmd.exe -S localhost -Q "sp_addsrvrolemember 'NT AUTHORITY\SYSTEM', 'sysadmin'"
-cmd /c sqlcmd.exe -S localhost -Q "sp_addsrvrolemember 'NT AUTHORITY\SYSTEM', 'dbcreator'"
+
+$arguments = "-S localhost -Q `"sp_addsrvrolemember '$env:ComputerName\$sqluser', 'sysadmin' `""
+Start-Process sqlcmd.exe -Credential $credential -ArgumentList $arguments
+
+$arguments = "-S localhost -Q `"sp_addsrvrolemember '$env:ComputerName\$sqluser', 'dbcreator' `""
+Start-Process sqlcmd.exe -Credential $credential -ArgumentList $arguments
+
+$arguments = "-S localhost -Q `"sp_addsrvrolemember 'NT AUTHORITY\SYSTEM', 'sysadmin' `""
+Start-Process sqlcmd.exe -Credential $credential -ArgumentList $arguments
+
+$arguments = "-S localhost -Q `"sp_addsrvrolemember 'NT AUTHORITY\SYSTEM', 'dbcreator' `""
+Start-Process sqlcmd.exe -Credential $credential -ArgumentList $arguments
+
 popd
+
 Write-Output "Successfully added users to SQL roles"
 
