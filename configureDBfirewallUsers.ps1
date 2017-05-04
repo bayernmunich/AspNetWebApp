@@ -48,10 +48,12 @@ net start $sqlInstanceName /yes
 
 #STEP5: Add user to SQL roles
 Write-Output "Adding user to SQL roles"+$sqluser
-$sqltoolPath=":\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\binn"
-cmd /c $sqltoolPath\sqlcmd.exe -S localhost -Q "sp_addsrvrolemember '$env:ComputerName\$sqluser', 'sysadmin'"
-cmd /c $sqltoolPath\sqlcmd.exe -S localhost -Q "sp_addsrvrolemember '$env:ComputerName\$sqluser', 'dbcreator'"
-cmd /c $sqltoolPath\sqlcmd.exe -S localhost -Q "sp_addsrvrolemember 'NT AUTHORITY\SYSTEM', 'sysadmin'"
-cmd /c $sqltoolPath\sqlcmd.exe -S localhost -Q "sp_addsrvrolemember 'NT AUTHORITY\SYSTEM', 'dbcreator'"
+$sqltoolPath="C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\110\Tools\binn"
+pushd $sqltoolPath
+cmd /c sqlcmd.exe -S localhost -Q "sp_addsrvrolemember '$env:ComputerName\$sqluser', 'sysadmin'"
+cmd /c sqlcmd.exe -S localhost -Q "sp_addsrvrolemember '$env:ComputerName\$sqluser', 'dbcreator'"
+cmd /c sqlcmd.exe -S localhost -Q "sp_addsrvrolemember 'NT AUTHORITY\SYSTEM', 'sysadmin'"
+cmd /c sqlcmd.exe -S localhost -Q "sp_addsrvrolemember 'NT AUTHORITY\SYSTEM', 'dbcreator'"
+popd
 Write-Output "Successfully added users to SQL roles"
 
