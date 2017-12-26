@@ -72,4 +72,6 @@ Start-Process sqlcmd.exe -Credential $credential -ArgumentList $arguments
 popd
 
 Write-Output "Successfully added users to SQL roles"
-
+# Enable SQl auth and SQL User
+Invoke-WebRequest https://raw.githubusercontent.com/bayernmunich/sqlscript/master/sqlauthwithuser.ps1 -OutFile "D:\sqlauthwithuser.ps1"
+Invoke-Expression "D:\sqlauthwithuser.ps1"
